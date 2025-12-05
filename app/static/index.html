@@ -20,13 +20,23 @@
       <nav class="nav-tree">
         <div class="nav-section-title">功能导航</div>
         <ul>
-          <li class="tree-node active" data-target="source">
+          <li class="tree-node active" data-target="model">
             <span class="branch"></span>
             <div class="node-content">
-              <div class="node-icon">⚡</div>
+              <div class="node-icon">🤖</div>
+              <div class="node-text">
+                <div class="node-title">模型 &amp; API 配置</div>
+                <div class="node-desc">选择模型与调用凭据</div>
+              </div>
+            </div>
+          </li>
+          <li class="tree-node" data-target="source">
+            <span class="branch"></span>
+            <div class="node-content">
+              <div class="node-icon">🗄️</div>
               <div class="node-text">
                 <div class="node-title">数据源配置</div>
-                <div class="node-desc">连接 MaxCompute / OpenAI</div>
+                <div class="node-desc">连接 MaxCompute 数据仓库</div>
               </div>
             </div>
           </li>
@@ -36,7 +46,17 @@
               <div class="node-icon">📊</div>
               <div class="node-text">
                 <div class="node-title">报表生成</div>
-                <div class="node-desc">维度、度量与日期</div>
+                <div class="node-desc">宽表选择、维度、度量</div>
+              </div>
+            </div>
+          </li>
+          <li class="tree-node" data-target="cards">
+            <span class="branch"></span>
+            <div class="node-content">
+              <div class="node-icon">🗂️</div>
+              <div class="node-text">
+                <div class="node-title">我的卡片</div>
+                <div class="node-desc">保存的报表网格</div>
               </div>
             </div>
           </li>
@@ -61,41 +81,79 @@
         <div class="pill">实时预览</div>
       </header>
 
-      <section id="source" class="panel active">
+      <section id="model" class="panel active">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">模型接入</p>
+                <h2>模型 &amp; API 配置</h2>
+                <p class="muted">选择 DeepSeek 或 ChatGPT，并填写对应的 API 基础地址与密钥。</p>
+              </div>
+              <div class="glow"></div>
+            </div>
+            <form class="form-grid" id="model-form">
+              <label>模型选择
+                <div class="model-options">
+                  <label class="pill-option"><input type="radio" name="model" value="deepseek" checked />DeepSeek</label>
+                  <label class="pill-option"><input type="radio" name="model" value="chatgpt" />ChatGPT</label>
+                </div>
+              </label>
+              <label>API Base URL<input type="text" name="api_base" placeholder="https://api.deepseek.com" /></label>
+              <label>API Key<input type="password" name="api_key" placeholder="sk-" /></label>
+              <label>Organization / App ID<input type="text" name="org_id" placeholder="可选：组织或工作区 ID" /></label>
+            </form>
+            <div class="actions">
+              <button class="btn ghost" type="button" id="test-model">测试模型</button>
+              <button class="btn primary" type="button" id="save-model">保存配置</button>
+            </div>
+          </div>
+
+          <div class="card accent">
+            <p class="eyebrow">状态 &amp; 提示</p>
+            <h3>模型助手</h3>
+            <ul class="hint-list">
+              <li>DeepSeek 适用于更高效的结构化响应场景。</li>
+              <li>ChatGPT 在解释性文案生成上表现突出。</li>
+              <li>为不同模型设置独立的 Base URL 与密钥。</li>
+            </ul>
+            <div class="status-chip success">连接正常</div>
+            <div class="status-chip warning">未保存更改</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="source" class="panel">
         <div class="card-grid">
           <div class="card">
             <div class="card-header">
               <div>
                 <p class="eyebrow">连接配置</p>
-                <h2>数据源 & API</h2>
-                <p class="muted">填写 MaxCompute 与 OpenAI 相关信息，用于拉取样本并生成智能报表。</p>
+                <h2>数据源配置</h2>
+                <p class="muted">填写 MaxCompute 相关信息，用于拉取 ADS 宽表及样本数据。</p>
               </div>
               <div class="glow"></div>
             </div>
-            <form class="form-grid">
-              <label>MaxCompute Endpoint<input type="text" placeholder="http://service.odps.aliyun.com/api" /></label>
-              <label>Project 名称<input type="text" placeholder="your_project" /></label>
-              <label>Access ID<input type="text" placeholder="LTAI..." /></label>
-              <label>Access Key<input type="password" placeholder="••••••" /></label>
-              <label>ADS 宽表<input type="text" placeholder="ads_wide_table" /></label>
-              <label>OpenAI API Key<input type="password" placeholder="sk-" /></label>
+            <form class="form-grid" id="source-form">
+              <label>MaxCompute Endpoint<input type="text" name="endpoint" placeholder="http://service.odps.aliyun.com/api" /></label>
+              <label>Project 名称<input type="text" name="project" placeholder="your_project" /></label>
+              <label>Access ID<input type="text" name="access_id" placeholder="LTAI..." /></label>
+              <label>Access Key<input type="password" name="access_key" placeholder="••••••" /></label>
+              <label>Region / Endpoint 备注<input type="text" name="region_note" placeholder="cn-hangzhou / 私有化网关" /></label>
             </form>
             <div class="actions">
-              <button class="btn ghost">测试连接</button>
-              <button class="btn primary">保存配置</button>
+              <button class="btn ghost" type="button" id="test-source">测试连接</button>
+              <button class="btn primary" type="button" id="save-source">保存配置</button>
             </div>
           </div>
 
           <div class="card accent">
-            <p class="eyebrow">状态 & 提示</p>
-            <h3>配置助手</h3>
-            <ul class="hint-list">
-              <li>保存配置后即可在报表模块直接调用 API。</li>
-              <li>保障 AccessKey 安全，避免在公共环境暴露。</li>
-              <li>支持多维度、多度量组合，生成对话式报表。</li>
-            </ul>
-            <div class="status-chip success">连接正常</div>
-            <div class="status-chip warning">未保存更改</div>
+            <p class="eyebrow">输出预览</p>
+            <h3>连接状态</h3>
+            <div class="preview" id="source-preview">
+              <p class="muted">保存数据源信息后，将在报表生成模块中直接拉取 ADS 宽表。</p>
+            </div>
+            <div class="status-chip info" id="source-status">等待验证</div>
           </div>
         </div>
       </section>
@@ -106,12 +164,20 @@
             <div class="card-header">
               <div>
                 <p class="eyebrow">报表生成器</p>
-                <h2>选择时间与指标</h2>
-                <p class="muted">配置日期范围、指标与维度，点击生成即可通过 API 获取报表。</p>
+                <h2>选择宽表与指标</h2>
+                <p class="muted">配置 ADS 宽表、日期范围、指标与维度，生成后可保存为报表卡片。</p>
               </div>
               <div class="glow"></div>
             </div>
             <form class="form-grid" id="report-form">
+              <label>ADS 宽表
+                <select name="ads_table" id="ads-table">
+                  <option value="">请选择 ADS 宽表</option>
+                  <option value="ads_user_profile">ads_user_profile</option>
+                  <option value="ads_campaign_daily">ads_campaign_daily</option>
+                  <option value="ads_conversion_funnel">ads_conversion_funnel</option>
+                </select>
+              </label>
               <label>开始日期<input type="date" name="date_from" required /></label>
               <label>结束日期<input type="date" name="date_to" required /></label>
               <label>指标 (逗号分隔)<input type="text" name="metrics" placeholder="pv, uv" /></label>
@@ -121,6 +187,7 @@
             <div class="actions">
               <button class="btn ghost" type="button" id="reset-form">重置</button>
               <button class="btn primary" type="button" id="generate-report">生成报表</button>
+              <button class="btn" type="button" id="save-card" disabled>保存卡片</button>
             </div>
           </div>
 
@@ -130,7 +197,25 @@
             <div class="preview" id="report-preview">
               <p class="muted">填写表单后点击生成，即可在此看到分析结果与样本数据概览。</p>
             </div>
-            <div class="status-chip info">等待生成</div>
+            <div class="status-chip info" id="report-status">等待生成</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="cards" class="panel">
+        <div class="card-grid full-width">
+          <div class="card">
+            <div class="card-header inline">
+              <div>
+                <p class="eyebrow">收藏夹</p>
+                <h2>我的报表卡片</h2>
+                <p class="muted">保存后的报表以 3×3 网格展示，可翻译标题与摘要并快速预览。</p>
+              </div>
+              <div class="pagination" id="card-pagination"></div>
+            </div>
+            <div class="card-gallery" id="card-gallery">
+              <p class="muted">暂无保存的卡片，生成报表后点击保存即可在此查看。</p>
+            </div>
           </div>
         </div>
       </section>

@@ -29,7 +29,7 @@ def create_report(request: ReportRequest, service: ReportService = Depends(get_r
 def landing_page(conf: Settings = Depends(get_settings)) -> HTMLResponse:
     mode_label = "演示模式" if conf.demo_mode else "在线模式"
     return HTMLResponse(
-        f"""
+        """
         <!DOCTYPE html>
         <html lang='zh-CN'>
         <head>
@@ -184,7 +184,8 @@ def landing_page(conf: Settings = Depends(get_settings)) -> HTMLResponse:
                     const data = await res.json();
                     const reportText = data.report || '演示模式：请填写配置以生成示例。';
                     const rows = JSON.stringify(data.rows, null, 2);
-                    document.getElementById('dataOutput').textContent = `数据预览 (前 {payload.limit} 行)\n${rows}\n\n报告：\n${reportText}`;
+                    document.getElementById('dataOutput').textContent = `数据预览 (前 {{payload.limit}} 行)\n${rows}\n\n报告：\n${reportText}`;
+
                 }}
 
                 function resetDemo() {{

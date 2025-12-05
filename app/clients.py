@@ -2,7 +2,7 @@ from collections.abc import Sequence
 from typing import Any
 
 from openai import OpenAI
-from pyodps import ODPS
+from odps import ODPS
 
 from .config import Settings
 

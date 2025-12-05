@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADS Ask GPT 控制台</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="page-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="pulse"></div>
+        <div>
+          <div class="brand-title">ADS Ask GPT</div>
+          <div class="brand-desc">智能报表工作台</div>
+        </div>
+      </div>
+      <nav class="nav-tree">
+        <div class="nav-section-title">功能导航</div>
+        <ul>
+          <li class="tree-node active" data-target="source">
+            <span class="branch"></span>
+            <div class="node-content">
+              <div class="node-icon">⚡</div>
+              <div class="node-text">
+                <div class="node-title">数据源配置</div>
+                <div class="node-desc">连接 MaxCompute / OpenAI</div>
+              </div>
+            </div>
+          </li>
+          <li class="tree-node" data-target="report">
+            <span class="branch"></span>
+            <div class="node-content">
+              <div class="node-icon">📊</div>
+              <div class="node-text">
+                <div class="node-title">报表生成</div>
+                <div class="node-desc">维度、度量与日期</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="status-dot"></div>
+        <div>
+          <div class="status-title">服务健康</div>
+          <div class="status-desc">实时健康检查 /health</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">为分析师打造</p>
+          <h1>可视化配置 · 一键生成报表</h1>
+          <p class="lede">左侧树形导航切换功能区域，右侧面板展示对应操作与结果预览。保持干净但充满动效的体验。</p>
+        </div>
+        <div class="pill">实时预览</div>
+      </header>
+
+      <section id="source" class="panel active">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">连接配置</p>
+                <h2>数据源 & API</h2>
+                <p class="muted">填写 MaxCompute 与 OpenAI 相关信息，用于拉取样本并生成智能报表。</p>
+              </div>
+              <div class="glow"></div>
+            </div>
+            <form class="form-grid">
+              <label>MaxCompute Endpoint<input type="text" placeholder="http://service.odps.aliyun.com/api" /></label>
+              <label>Project 名称<input type="text" placeholder="your_project" /></label>
+              <label>Access ID<input type="text" placeholder="LTAI..." /></label>
+              <label>Access Key<input type="password" placeholder="••••••" /></label>
+              <label>ADS 宽表<input type="text" placeholder="ads_wide_table" /></label>
+              <label>OpenAI API Key<input type="password" placeholder="sk-" /></label>
+            </form>
+            <div class="actions">
+              <button class="btn ghost">测试连接</button>
+              <button class="btn primary">保存配置</button>
+            </div>
+          </div>
+
+          <div class="card accent">
+            <p class="eyebrow">状态 & 提示</p>
+            <h3>配置助手</h3>
+            <ul class="hint-list">
+              <li>保存配置后即可在报表模块直接调用 API。</li>
+              <li>保障 AccessKey 安全，避免在公共环境暴露。</li>
+              <li>支持多维度、多度量组合，生成对话式报表。</li>
+            </ul>
+            <div class="status-chip success">连接正常</div>
+            <div class="status-chip warning">未保存更改</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="report" class="panel">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">报表生成器</p>
+                <h2>选择时间与指标</h2>
+                <p class="muted">配置日期范围、指标与维度，点击生成即可通过 API 获取报表。</p>
+              </div>
+              <div class="glow"></div>
+            </div>
+            <form class="form-grid" id="report-form">
+              <label>开始日期<input type="date" name="date_from" required /></label>
+              <label>结束日期<input type="date" name="date_to" required /></label>
+              <label>指标 (逗号分隔)<input type="text" name="metrics" placeholder="pv, uv" /></label>
+              <label>维度 (逗号分隔)<input type="text" name="dimensions" placeholder="dt, channel" /></label>
+              <label>返回行数<input type="number" name="limit" min="1" max="500" value="50" /></label>
+            </form>
+            <div class="actions">
+              <button class="btn ghost" type="button" id="reset-form">重置</button>
+              <button class="btn primary" type="button" id="generate-report">生成报表</button>
+            </div>
+          </div>
+
+          <div class="card accent">
+            <p class="eyebrow">输出预览</p>
+            <h3>智能报表摘要</h3>
+            <div class="preview" id="report-preview">
+              <p class="muted">填写表单后点击生成，即可在此看到分析结果与样本数据概览。</p>
+            </div>
+            <div class="status-chip info">等待生成</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

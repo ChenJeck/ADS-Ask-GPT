@@ -42,7 +42,10 @@ def get_settings() -> Settings:
 
 
 def get_report_service(conf: Settings = Depends(get_settings)) -> ReportService:
-    return ReportService(conf)
+    try:
+        return ReportService(conf)
+    except ImportError as exc:  # pragma: no cover - dependency guard
+        raise HTTPException(status_code=500, detail=str(exc))
 
 
 @app.get("/", response_class=HTMLResponse)

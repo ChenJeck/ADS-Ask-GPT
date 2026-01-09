@@ -1,5 +1,4 @@
-fastapi
-uvicorn[standard]
+django
 openai>=1.12.0
 pyodps
 pydantic

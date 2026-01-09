@@ -2,7 +2,14 @@ from collections.abc import Sequence
 from typing import Any
 
 from openai import OpenAI
-from pyodps import ODPS
+
+try:  # pragma: no cover - import-time guard for optional dependency
+    from pyodps import ODPS
+except ModuleNotFoundError as exc:  # pragma: no cover - executed only when pyodps missing
+    ODPS = None  # type: ignore[assignment]
+    _pyodps_import_error = exc
+else:
+    _pyodps_import_error = None
 
 from .config import Settings
 
@@ -11,6 +18,11 @@ class MaxComputeClient:
     """Thin wrapper around pyodps for querying ADS tables."""
 
     def __init__(self, settings: Settings) -> None:
+        if ODPS is None:
+            raise ImportError(
+                "pyodps is required for MaxCompute access. Install dependencies via 'pip install -r requirements.txt'."
+            ) from _pyodps_import_error
+
         self._settings = settings
         self._client = ODPS(
             settings.maxcompute_access_id,
